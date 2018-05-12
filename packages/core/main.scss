@@ -24,16 +24,21 @@ body
 
     width: 100%;
     min-height: 100%;
+    padding: 1% 5% 0;
 }
 
-.wrapper
+.form-wrapper
 {
-    padding: 2% 5% 0;
+    display: flex;
+    align-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .header
 {
-    height: 10%;
+    height: 80px;
     margin-bottom: 5%;
 
     border: 1px dashed #000;
@@ -48,25 +53,37 @@ body
 
 .input
 {
+    width: 300px;
+    height: 30px;
     margin-bottom: 2%;
-
     border: 1px solid black;
-
-    @include center-position;
+    outline: none;
+    &_big {
+        width: 500px;
+        height: 50px;
+    }
 }
 
 button
 {
+    display: inline-block;
+
     width: 100px;
     height: 30px;
-    margin-right: 30px;
+    margin: 0 30px 15px;
 
-    background-color: #fff;
+    cursor: pointer;
 
-    @include center-position;
+    border: 1px solid black;
+    outline: none;
+    background-color: $primary-color;
     &_small
     {
         width: 30px;
         height: 10px;
+    }
+    &:hover
+    {
+        opacity: .8;
     }
 }

@@ -1,13 +1,13 @@
 import React from 'react';
 
-function Input({placeholder}) {
+const Input = ({className, placeholder}) => {
     return(
         <input
-            className="input"
+            className={className}
             type="text"
             placeholder={placeholder}
         />
     );
-}
+};
 
 export default Input;
