@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,mBAOC;EANC,IAAK;IACH,SAAS,EAAE,YAAY;EAEzB,EAAG;IACD,SAAS,EAAE,cAAc",
+"sources": ["preloader.scss"],
+"names": [],
+"file": "preloader.css"
+}

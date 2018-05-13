@@ -10,7 +10,7 @@ body {
   font: Helvetica, sans-serif;
   width: 100%;
   min-height: 100%;
-  padding: 1% 5% 0; }
+  padding: 1% 5%; }
 
 .form-wrapper {
   display: flex;
@@ -35,25 +35,25 @@ body {
   width: 300px;
   height: 30px;
   margin-bottom: 2%;
+  padding: 10px;
   border: 1px solid black;
   outline: none; }
-  .input_big {
+  .input_width-500 {
     width: 500px;
     height: 50px; }
 
-button {
+.button {
   display: inline-block;
-  width: 100px;
+  width: 120px;
   height: 30px;
   margin: 0 30px 15px;
   cursor: pointer;
   border: 1px solid black;
   outline: none;
   background-color: #eff6fd; }
-  button_small {
-    width: 30px;
-    height: 10px; }
-  button:hover {
-    opacity: .8; }
+  .button_width-500 {
+    width: 300px; }
+  .button:hover {
+    opacity: .7; }
 
 /*# sourceMappingURL=main.css.map */

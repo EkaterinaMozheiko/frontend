@@ -3,7 +3,8 @@ const React = require('react');
 const Router = require('react-router-dom').BrowserRouter;
 import { Route } from 'react-router-dom'
 import Header from '../components/header';
-import Form from '../components/form'
+/*import Form from '../components/form'*/
+const dynamicForm = require('../components/form');
 
 const { div } = require('react-dom');
 
@@ -12,7 +13,7 @@ const Main = () => (
         <div className="poll-application">
             <Header/>
             <div className="poll-wrapper">
-                <Route exact path="/" component={Form} />
+                <Route exact path="/" component={dynamicForm} />
                 <Route path="/polls" component={Poll} />
             </div>
         </div>

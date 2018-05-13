@@ -2,20 +2,79 @@ const React = require('react');
 import Input from './input';
 import Button from './button';
 const { div } = require('react-dom');
+const createRequest = require('core/create-request');
 
-const Form = () => {
-    return(
-        <div className="form-wrapper">
-            <Input className="input input_big" placeholder="Question"/>
-            <Input className="input" placeholder="Option 1"/>
-            <Input className="input" placeholder="Option 2"/>
-            <Input className="input" placeholder="Option 3"/>
-            <div className="button-wrapper">
-                <Button className="button button_small" type="button" name="Add Options" value="+ Add option"/>
-                <Button className="button button__send" type="submit" name="Create" value="Create"/>
+class dynamicForm extends React.Component {
+
+    constructor(props) {
+
+        super(props);
+        this.state = ( {
+            min: 3,
+            max: 10,
+            value: 0,
+            inputCount:3,
+            polls: []
+        });
+
+        this.addInput = this.addInput.bind(this);
+        this.addMoreInputs = this.addMoreInputs.bind(this);
+        this.removeInputs = this.removeInputs.bind(this);
+    }
+
+    componentDidMount() {
+        createRequest('fetchPolls').then((response) => {
+
+            this.setState({ polls: response.data || [] });
+            console.log(this.state.polls);
+        });
+    }
+
+
+    render() {
+        return (
+            <div className="form-wrapper">
+                <Input className="input input_width-500" placeholder="Question"/>
+                {this.inputs()}
+                <div className="button-wrapper">
+                    <Button className="button" type="button" value="+ Add option" onClick={this.addMoreInputs}/>
+                    <Button className="button" type="button" value="- Delete option" onClick={this.removeInputs}/>
+                </div>
+                <Button className="button button_width-500" type="submit" value="Create"/>
             </div>
-        </div>
-    );
-};
+        );
+    }
 
-export default Form;
+    addMoreInputs(){
+        let inputCount = this.state.inputCount;
+        if (inputCount < this.state.max) {
+            this.setState({inputCount: inputCount + 1})
+        }
+    }
+
+    removeInputs(){
+        let inputCount = this.state.inputCount;
+        if (inputCount > this.state.min) {
+            this.setState({inputCount: inputCount - 1})
+        }
+    }
+
+    addInput(i) {
+        let placeholder = "Option " + ++i ;
+        return(
+            <Input key={i} className="input" placeholder={placeholder}/>
+        )
+    }
+
+    inputs() {
+        let rows = [];
+        let inputCount = this.state.inputCount;
+         for (let i=0; i < inputCount; i++) {
+            rows.push(this.addInput(i))
+        }
+        return rows;
+    }
+}
+
+module.exports = dynamicForm;
+

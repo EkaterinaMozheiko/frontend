@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Input = ({className, placeholder}) => {
+const Input = (props) => {
     return(
         <input
-            className={className}
+            className={props.className}
             type="text"
-            placeholder={placeholder}
+            placeholder={props.placeholder}
         />
     );
 };
