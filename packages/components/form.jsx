@@ -2,7 +2,7 @@ const React = require('react');
 import Input from './input';
 import Button from './button';
 const { div } = require('react-dom');
-const createRequest = require('core/create-request');
+// const createRequest = require('core/create-request');
 
 class dynamicForm extends React.Component {
 
@@ -12,9 +12,8 @@ class dynamicForm extends React.Component {
         this.state = ( {
             min: 3,
             max: 10,
-            value: 0,
-            inputCount:3,
-            polls: []
+            inputCount:3
+           // polls: []
         });
 
         this.addInput = this.addInput.bind(this);
@@ -22,20 +21,18 @@ class dynamicForm extends React.Component {
         this.removeInputs = this.removeInputs.bind(this);
     }
 
-    componentDidMount() {
+   /* componentDidMount() {
         createRequest('fetchPolls').then((response) => {
-
             this.setState({ polls: response.data || [] });
-            console.log(this.state.polls);
+            console.log('Response = ' + this.state.polls);
         });
-    }
-
+    };*/
 
     render() {
         return (
             <div className="form-wrapper">
                 <Input className="input input_width-500" placeholder="Question"/>
-                {this.inputs()}
+                {this.getInputs()}
                 <div className="button-wrapper">
                     <Button className="button" type="button" value="+ Add option" onClick={this.addMoreInputs}/>
                     <Button className="button" type="button" value="- Delete option" onClick={this.removeInputs}/>
@@ -66,7 +63,7 @@ class dynamicForm extends React.Component {
         )
     }
 
-    inputs() {
+    getInputs() {
         let rows = [];
         let inputCount = this.state.inputCount;
          for (let i=0; i < inputCount; i++) {

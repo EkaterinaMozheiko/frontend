@@ -7,17 +7,18 @@
 
 html,
 body {
-  font: Helvetica, sans-serif;
+  font-size: 16px;
+  font-style: Helvetica, sans-serif;
   width: 100%;
   min-height: 100%;
   padding: 1% 5%; }
 
 .form-wrapper {
+  justify-content: center;
   display: flex;
-  align-content: space-between;
   align-items: center;
   flex-direction: column;
-  justify-content: center; }
+  justify-content: space-between; }
 
 .header {
   height: 80px;
@@ -29,7 +30,7 @@ body {
   flex-direction: row;
   justify-content: space-around; }
   .header__title {
-    font-size: 24px; }
+    font-size: 32px; }
 
 .input {
   width: 300px;
@@ -55,5 +56,8 @@ body {
     width: 300px; }
   .button:hover {
     opacity: .7; }
+
+.polls-header {
+  font-size: 24px; }
 
 /*# sourceMappingURL=main.css.map */

@@ -1,11 +1,12 @@
-$font: Helvetica, sans-serif;
+$font-style: Helvetica, sans-serif;
+$font-size: 16px;
 $primary-color: #eff6fd;
-@mixin center-position
+@mixin center-position ($direction, $content)
 {
     display: flex;
     align-items: center;
-    flex-direction: row;
-    justify-content: space-around;
+    flex-direction: $direction;
+    justify-content: $content;
 }
 
 *
@@ -20,7 +21,8 @@ $primary-color: #eff6fd;
 html,
 body
 {
-    font: $font;
+    font-size: $font-size;
+    font-style: $font-style;
 
     width: 100%;
     min-height: 100%;
@@ -29,11 +31,9 @@ body
 
 .form-wrapper
 {
-    display: flex;
-    align-content: space-between;
-    align-items: center;
-    flex-direction: column;
     justify-content: center;
+
+    @include center-position(column, space-between);
 }
 
 .header
@@ -44,10 +44,10 @@ body
     border: 1px dashed #000;
     background-color: $primary-color;
 
-    @include center-position;
+    @include center-position(row, space-around);
     &__title
     {
-        font-size: 24px;
+        font-size: $font-size * 2;
     }
 }
 
@@ -88,4 +88,9 @@ body
     {
         opacity: .7;
     }
+}
+
+.polls-header
+{
+    font-size: $font-size * 1.5;
 }

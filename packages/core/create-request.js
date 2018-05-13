@@ -40,11 +40,6 @@ const compileUrl = (url, params) => {
     return resultString;
 };
 
-/**
- * [exports description]
- * @param  {{path: string, method: string}} options fetch options
- * @return {Promise}
- */
 module.exports = (requestName, queryOptions, body) => {
     const options = apiConfig[requestName];
 
