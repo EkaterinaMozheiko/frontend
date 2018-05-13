@@ -3,9 +3,11 @@ const React = require('react');
 const Router = require('react-router-dom').BrowserRouter;
 import { Route } from 'react-router-dom'
 import Header from '../components/header';
+import chosenPoll from "../poll/poll";
+import PollLink from "../poll/poll-link";
 /*import Form from '../components/form'*/
 const dynamicForm = require('../components/form');
-
+const Polls = require('../polls/polls').default;
 const { div } = require('react-dom');
 
 const Main = () => (
@@ -14,7 +16,8 @@ const Main = () => (
             <Header/>
             <div className="poll-wrapper">
                 <Route exact path="/" component={dynamicForm} />
-                <Route path="/polls" component={Poll} />
+                <Route path="/polls" component={Polls}/>
+                <Route path='/polls/:id' component={chosenPoll}/>
             </div>
         </div>
     </Router>

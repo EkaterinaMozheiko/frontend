@@ -34,6 +34,7 @@ body
     justify-content: center;
 
     @include center-position(column, space-between);
+
 }
 
 .header
@@ -48,6 +49,7 @@ body
     &__title
     {
         font-size: $font-size * 2;
+      flex-basis: 70%;
     }
 }
 
@@ -90,7 +92,14 @@ body
     }
 }
 
-.polls-header
-{
+.polls {
+  &__header
+  {
     font-size: $font-size * 1.5;
+    margin-bottom: 15px;
+  }
+
+  &__item {
+    margin-bottom: 5px;
+  }
 }

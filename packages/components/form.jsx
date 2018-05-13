@@ -2,7 +2,6 @@ const React = require('react');
 import Input from './input';
 import Button from './button';
 const { div } = require('react-dom');
-// const createRequest = require('core/create-request');
 
 class dynamicForm extends React.Component {
 
@@ -12,8 +11,9 @@ class dynamicForm extends React.Component {
         this.state = ( {
             min: 3,
             max: 10,
-            inputCount:3
-           // polls: []
+            inputCount:3,
+            question: '',
+            options: []
         });
 
         this.addInput = this.addInput.bind(this);
@@ -21,23 +21,16 @@ class dynamicForm extends React.Component {
         this.removeInputs = this.removeInputs.bind(this);
     }
 
-   /* componentDidMount() {
-        createRequest('fetchPolls').then((response) => {
-            this.setState({ polls: response.data || [] });
-            console.log('Response = ' + this.state.polls);
-        });
-    };*/
-
     render() {
         return (
             <div className="form-wrapper">
-                <Input className="input input_width-500" placeholder="Question"/>
+                <Input className="input input_width-500" placeholder="Question" value={this.state.title}/>
                 {this.getInputs()}
                 <div className="button-wrapper">
                     <Button className="button" type="button" value="+ Add option" onClick={this.addMoreInputs}/>
                     <Button className="button" type="button" value="- Delete option" onClick={this.removeInputs}/>
                 </div>
-                <Button className="button button_width-500" type="submit" value="Create"/>
+                <Button className="button button_width-500" type="submit" value="Create" onClick={this.sendPoll}/>
             </div>
         );
     }
@@ -71,6 +64,11 @@ class dynamicForm extends React.Component {
         }
         return rows;
     }
+
+    sendPoll() {
+
+    }
+
 }
 
 module.exports = dynamicForm;

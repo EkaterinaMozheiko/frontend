@@ -1,9 +1,10 @@
 const React = require('react');
 const { div } = require('react-dom');
 const createRequest = require('core/create-request');
+const Router = require('react-router-dom').BrowserRouter;
+import { Link } from 'react-router-dom'
 
-class Poll extends React.Component {
-
+class Polls extends React.Component {
     constructor(props) {
 
         super(props);
@@ -15,20 +16,25 @@ class Poll extends React.Component {
     componentDidMount() {
         createRequest('fetchPolls').then((response) => {
             this.setState({ polls: response.data || [] });
-            console.log('Response = ' + this.state.polls);
         });
     };
 
     render() {
         return (
-            <div className="polls-list">
-                <h2 className="polls-header">
+            <div className="polls">
+                <h2 className="polls__header">
                     All created polls:
                 </h2>
-                {this.state.polls}
+                <ul>
+                    {this.state.polls.map(poll =>
+                        <li key={poll.id}>
+                            <Link to={`/polls/${poll.id}`}><div className="polls__item">{poll.title}</div></Link>
+                        </li>
+                    )}
+                </ul>
             </div>
         );
     }
 }
 
-export default Poll;
+export default Polls;

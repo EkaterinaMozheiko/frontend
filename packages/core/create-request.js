@@ -56,7 +56,7 @@ module.exports = (requestName, queryOptions, body) => {
                 'Content-Type': 'application/json',
             }),
             method: options.method || 'GET',
-            mode: 'no-cors',
+            //mode: 'no-cors',
             body: body ? JSON.stringify(body) : undefined,
         })
             .then((response) => response.json())

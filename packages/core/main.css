@@ -30,7 +30,8 @@ body {
   flex-direction: row;
   justify-content: space-around; }
   .header__title {
-    font-size: 32px; }
+    font-size: 32px;
+    flex-basis: 70%; }
 
 .input {
   width: 300px;
@@ -57,7 +58,10 @@ body {
   .button:hover {
     opacity: .7; }
 
-.polls-header {
-  font-size: 24px; }
+.polls__header {
+  font-size: 24px;
+  margin-bottom: 15px; }
+.polls__item {
+  margin-bottom: 5px; }
 
 /*# sourceMappingURL=main.css.map */
