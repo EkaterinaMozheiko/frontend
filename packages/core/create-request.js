@@ -48,7 +48,7 @@ module.exports = (requestName, queryOptions, body) => {
     }
 
     return new Promise((resolve) => {
-        const requestUrl = API_HOST + compileUrl(options.path, queryOptions);
+        const requestUrl = compileUrl(options.path, queryOptions);
 
         fetch(requestUrl, {
             headers: new Headers({
@@ -61,7 +61,7 @@ module.exports = (requestName, queryOptions, body) => {
         })
             .then((response) => response.json())
             .then((response) => {
-                console.log(response);
+                // console.log(response);
                 response.messages = response.messages || [];
                 resolve(response);
             })

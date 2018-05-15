@@ -1,7 +1,7 @@
 import Poll from "../polls/polls";
 const React = require('react');
 const Router = require('react-router-dom').BrowserRouter;
-import { Route } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import Header from '../components/header';
 import chosenPoll from "../poll/poll";
 import PollLink from "../poll/poll-link";
@@ -15,9 +15,9 @@ const Main = () => (
         <div className="poll-application">
             <Header/>
             <div className="poll-wrapper">
-                <Route exact path="/" component={dynamicForm} />
-                <Route path="/polls" component={Polls}/>
-                <Route path='/polls/:id' component={chosenPoll}/>
+                    <Route exact path="/" component={dynamicForm} />
+                    <Route exact path="/polls" component={Polls}/>
+                    <Route path='/polls/:id' component={chosenPoll}/>
             </div>
         </div>
     </Router>

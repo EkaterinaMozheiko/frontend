@@ -62,6 +62,10 @@ body {
   font-size: 24px;
   margin-bottom: 15px; }
 .polls__item {
-  margin-bottom: 5px; }
+  margin-bottom: 5px;
+  list-style: none; }
+.polls__item:hover {
+  opacity: .7;
+  text-decoration: underline; }
 
 /*# sourceMappingURL=main.css.map */

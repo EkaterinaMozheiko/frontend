@@ -5,21 +5,35 @@ class chosenPoll extends React.Component {
     constructor(props) {
         super(props);
         this.state = ( {
-            poll: []
+            poll: {}
         });
     }
 
     componentDidMount() {
-        createRequest('fetchPoll').then((response) => {
+        const id = this.props.match.params.id;
+        createRequest('fetchPoll', {id}).then((response) => {
             this.setState({ poll: response.data || [] });
-            console.log(this.state.title);
         });
+
     };
+
+    renderOptions() {
+        let i = 0;
+        if (this.state.poll.options) {
+            return this.state.poll.options.map(option =>
+                    <li key={i++}>{option}</li>
+            );
+        }
+    }
+
 
     render() {
         return (
             <div>
-                <h1>{this.state.poll.title}</h1>
+                <h2>{this.state.poll.title}</h2>
+                <ul>
+                    {this.renderOptions()}
+                </ul>
             </div>
         )
     }

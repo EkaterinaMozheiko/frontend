@@ -9,9 +9,9 @@ class dynamicForm extends React.Component {
 
         super(props);
         this.state = ( {
-            min: 3,
+            min: 2,
             max: 10,
-            inputCount:3,
+            inputCount: 3,
             question: '',
             options: []
         });
@@ -19,12 +19,15 @@ class dynamicForm extends React.Component {
         this.addInput = this.addInput.bind(this);
         this.addMoreInputs = this.addMoreInputs.bind(this);
         this.removeInputs = this.removeInputs.bind(this);
+        this.onInputChange = this.onInputChange.bind(this);
+
+        this.elementCount = [];
     }
 
     render() {
         return (
             <div className="form-wrapper">
-                <Input className="input input_width-500" placeholder="Question" value={this.state.title}/>
+                <Input className="input input_width-500" placeholder="Question" value={this.state.title} ref={(el) => { this.inputCount.push(el)}}/>
                 {this.getInputs()}
                 <div className="button-wrapper">
                     <Button className="button" type="button" value="+ Add option" onClick={this.addMoreInputs}/>
@@ -52,7 +55,7 @@ class dynamicForm extends React.Component {
     addInput(i) {
         let placeholder = "Option " + ++i ;
         return(
-            <Input key={i} className="input" placeholder={placeholder}/>
+            <Input key={i} className="input" placeholder={placeholder} ref={(el) => { this.inputCount.push(el)}}/>
         )
     }
 
@@ -65,8 +68,11 @@ class dynamicForm extends React.Component {
         return rows;
     }
 
-    sendPoll() {
-
+    onInputChange(event) {
+        this.setState({
+            title: event.target.value
+        });
+        console.log(this.state.title);
     }
 
 }

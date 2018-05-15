@@ -6,8 +6,8 @@ const Header = () => {
         <div className="wrapper">
             <header className="header">
                 <div className="header__title">Create Your Poll</div>
-                <Link to="/">Home</Link>
-                <Link to="/polls">View all polls</Link>
+                <Link to="/" style={{ textDecoration: 'none' }}>Home</Link>
+                <Link to="/polls" style={{ textDecoration: 'none' }}>View all polls</Link>
             </header>
         </div>
     );

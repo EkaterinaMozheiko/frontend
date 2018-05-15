@@ -5,7 +5,7 @@ module.exports = {
     },
 
     fetchPoll: {
-        path: '/api/v001/poll/:id',
+        path: '/api/v001/polls/:id',
         method: 'GET',
     },
 
