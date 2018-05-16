@@ -23,14 +23,14 @@ class Polls extends React.Component {
 
     render() {
         return (
-            <div className="polls">
-                <h2 className="polls__header">
+            <div className="main-wrapper main-wrapper_small">
+                <h2 className="main-title">
                     All created polls:
                 </h2>
-                <ul>
+                <ul className="poll-list">
                     {this.state.polls.map(poll =>
                         <li className="polls__item" key={poll.id}>
-                            <Link to={`/polls/${poll.id}`} style={{ textDecoration: 'none' }}>{poll.title}</Link>
+                            <Link className="link" to={`/polls/${poll.id}`}>{poll.title}</Link>
                         </li>
                     )}
                 </ul>
