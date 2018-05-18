@@ -1,10 +1,7 @@
-import chosenPoll from "../poll/poll";
-
 const React = require('react');
-const { div } = require('react-dom');
+import Button from '../components/button';
 const createRequest = require('core/create-request');
-const Router = require('react-router-dom').BrowserRouter;
-import { Link, Route, Switch } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 class Polls extends React.Component {
     constructor(props) {
@@ -13,6 +10,8 @@ class Polls extends React.Component {
         this.state = ( {
             polls: []
         });
+
+        this.deletePoll = this.deletePoll.bind(this);
     }
 
     componentDidMount() {
@@ -20,6 +19,12 @@ class Polls extends React.Component {
             this.setState({ polls: response.data || [] });
         });
     };
+
+        deletePoll(id) {
+            createRequest('deletePoll', {id}).then((response) => {
+            this.setState({ polls: response.data || [] });
+        });
+    }
 
     render() {
         return (
@@ -30,6 +35,7 @@ class Polls extends React.Component {
                 <ul className="poll-list">
                     {this.state.polls.map(poll =>
                         <li className="polls__item" key={poll.id}>
+                            <Button className="button button__delete" onClick={this.deletePoll.bind(this, poll.id)}/>
                             <Link className="link" to={`/polls/${poll.id}`}>{poll.title}</Link>
                         </li>
                     )}

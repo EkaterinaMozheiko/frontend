@@ -56,12 +56,10 @@ module.exports = (requestName, queryOptions, body) => {
                 'Content-Type': 'application/json',
             }),
             method: options.method || 'GET',
-            //mode: 'no-cors',
             body: body ? JSON.stringify(body) : undefined,
         })
             .then((response) => response.json())
             .then((response) => {
-                // console.log(response);
                 response.messages = response.messages || [];
                 resolve(response);
             })

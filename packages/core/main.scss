@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=PT+Sans");
+
 $font-family: 'PT Sans', sans-serif;;
 $font-size: 16px;
 $primary-color: #eff6fd;
@@ -27,6 +29,7 @@ body
 
     width: 100%;
     min-height: 100%;
+    padding-bottom: 50px;
 
     background-color: #eee;
 }
@@ -41,6 +44,11 @@ body
     &_small
     {
         padding: 50px;
+    }
+
+    &_chart
+    {
+        margin-top: 20px;
     }
 }
 
@@ -136,6 +144,14 @@ body
     {
         border: 2px solid $color;
     }
+
+  &_red {
+    border: 2px solid red;
+  }
+  &_red::-webkit-input-placeholder
+  {
+    color: red;
+  }
 }
 
 .button
@@ -166,6 +182,13 @@ body
         border-color: $color;
         background-color: #fff;
     }
+
+  &__delete {
+    width: 20px;
+    height: 20px;
+    background: url("../components/img/delete.svg") no-repeat center;
+    border: none;
+  }
 
 }
 
@@ -337,6 +360,30 @@ input[type='radio']
 
 .vote-text
 {
+    margin-top: 10px;
+
     color: $color;
-  margin-top: 10px;
+}
+
+.bar
+{
+    padding: 5px;
+
+    text-align: right;
+
+    color: white;
+    background-color: $color;
+}
+
+.bar-wrapper
+{
+    margin: 20px 0;
+}
+
+.chart-title
+{
+    font-size: $font-size * 1.2;
+    font-weight: 700;
+  display: inline-block;
+  margin-right: 20px;
 }

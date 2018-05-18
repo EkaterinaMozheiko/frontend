@@ -1,6 +1,9 @@
 import React from 'react';
 
 class Input extends React.Component {
+    getValue() {
+        return this.input.value;
+    }
     render() {
         return (
             <input
@@ -8,24 +11,11 @@ class Input extends React.Component {
                 type="text"
                 placeholder={this.props.placeholder}
                 value={this.props.value}
+                ref={(el) => { this.input = el; }}
+                onChange={this.props.onChange}
             />
         )
     }
 }
 
-
-/*
-
-const Input = (props) => {
-    return(
-        <input
-            className={props.className}
-            type="text"
-            placeholder={props.placeholder}
-            value={props.value}
-            //ref={props.link}
-        />
-    )
-};
-*/
 export default Input;

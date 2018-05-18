@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css?family=PT+Sans");
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -11,6 +12,7 @@ body {
   font-size: 16px;
   width: 100%;
   min-height: 100%;
+  padding-bottom: 50px;
   background-color: #eee; }
 
 .main-wrapper {
@@ -19,6 +21,8 @@ body {
   box-shadow: 0 0 10px 5px #dddddd; }
   .main-wrapper_small {
     padding: 50px; }
+  .main-wrapper_chart {
+    margin-top: 20px; }
 
 .main-title {
   font-size: 32px;
@@ -79,6 +83,10 @@ body {
     border-radius: 10px; }
   .input_width-500:focus {
     border: 2px solid #1abc9c; }
+  .input_red {
+    border: 2px solid red; }
+  .input_red::-webkit-input-placeholder {
+    color: red; }
 
 .button {
   font-weight: 500;
@@ -100,6 +108,11 @@ body {
     color: #1abc9c;
     border-color: #1abc9c;
     background-color: #fff; }
+  .button__delete {
+    width: 20px;
+    height: 20px;
+    background: url("../components/img/delete.svg") no-repeat center;
+    border: none; }
 
 .poll-list {
   margin-top: 20px; }
@@ -188,7 +201,22 @@ input[type='radio']:focus + .option-label:before {
     margin-right: 0; }
 
 .vote-text {
-  color: #1abc9c;
-  margin-top: 10px; }
+  margin-top: 10px;
+  color: #1abc9c; }
+
+.bar {
+  padding: 5px;
+  text-align: right;
+  color: white;
+  background-color: #1abc9c; }
+
+.bar-wrapper {
+  margin: 20px 0; }
+
+.chart-title {
+  font-size: 19.2px;
+  font-weight: 700;
+  display: inline-block;
+  margin-right: 20px; }
 
 /*# sourceMappingURL=main.css.map */

@@ -1,4 +1,4 @@
-import chosenPoll from "./poll";
+/*import chosenPoll from "./poll";
 const Polls = require('../polls/polls').default;
 const React = require('react');
 import { Route, Switch } from 'react-router-dom'
@@ -9,4 +9,4 @@ const PollLink = () => (
     </Switch>
 );
 
-export default PollLink;
+export default PollLink;*/
