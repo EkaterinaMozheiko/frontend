@@ -18,7 +18,7 @@ class chosenPoll extends React.Component {
             selectedOption: "",
             showChart: false,
             isToggleOn: false
-
+            //warningMessage: ''
         });
 
         this.sendVote = this.sendVote.bind(this);
@@ -28,7 +28,7 @@ class chosenPoll extends React.Component {
         this.URL = API_HOST + this.props.match.url;
         this.handleClick = this.handleClick.bind(this);
         this.refreshResults = this.refreshResults.bind(this);
-        this.showMessage = this.showMessage.bind(this);
+        this.hideMessage = this.hideMessage.bind(this);
     }
 
     componentDidMount() {
@@ -62,6 +62,12 @@ class chosenPoll extends React.Component {
     }
 
     sendVote() {
+        if(this.state.selectedOption === '') {
+            this.setState({ message: "Please choose one answer!" });
+            this.hideMessage();
+            return;
+        }
+
         this.setState({ message: "Thanks for your vote." });
 
         if (!this.state.selectedOptions[this.state.selectedOption]) {
@@ -70,9 +76,8 @@ class chosenPoll extends React.Component {
         else {
             this.state.selectedOptions[this.state.selectedOption] +=1;
         }
-       console.log(this.state.selectedOptions);
 
-        this.showMessage();
+        this.hideMessage();
 
     }
 
@@ -118,10 +123,9 @@ class chosenPoll extends React.Component {
         )
     }
 
-    showMessage() {
+    hideMessage() {
         setTimeout(function() {
             this.setState({message: ''});
-
         }.bind(this), 1000);
     }
 
@@ -147,7 +151,8 @@ class chosenPoll extends React.Component {
 
                     </div>
                     <Button className="button button__vote" type="submit" value="Vote" onClick={this.sendVote}/>
-                    <Button className="button" type="submit" value={this.state.isToggleOn ? 'Hide results' : 'Show results'} onClick={this.handleClick}/>
+                    <Button className="button" type="submit" value={this.state.isToggleOn ? 'Hide results' : 'Show results'}
+                            onClick={this.handleClick}/>
                     <p className="vote-text">{this.state.message}</p>
                 </div>
                 <div className="share-wrapper">
@@ -162,9 +167,7 @@ class chosenPoll extends React.Component {
                     {this.viewResults()}
 
                 </div>
-
             </div>
-
         )
     }
 }

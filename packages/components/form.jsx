@@ -1,7 +1,6 @@
 const React = require('react');
 import Input from './input';
 import Button from './button';
-const { div } = require('react-dom');
 const createRequest = require('core/create-request');
 const { responseStatuses } = require('core/constants');
 
@@ -14,8 +13,8 @@ class Form extends React.Component {
             min: 2,
             max: 10,
             inputCount: 2,
-            isFilled: false,
-            enabled: false
+            isTitleFilled: false,
+            isInputFilled: false
         });
 
         this.addInput = this.addInput.bind(this);
@@ -23,7 +22,7 @@ class Form extends React.Component {
         this.removeInputs = this.removeInputs.bind(this);
         this.sendPoll = this.sendPoll.bind(this);
         this.addPoll = this.addPoll.bind(this);
-        this.handleChange = this.handleChange.bind(this);
+        this.handleTitleChange = this.handleTitleChange.bind(this);
 
         this.optionList =[];
         this.inputTitleElement = null;
@@ -32,74 +31,50 @@ class Form extends React.Component {
     sendPoll(event) {
         event.preventDefault();
 
-        this.inputTitleElement.input.className = this.state.isFilled ? "input input_width-500" : "input input_width-500 input_red";
+        if (!this.state.isTitleFilled) {
+            this.inputTitleElement.input.className = "input input_width-500 input_red";
+            return;
+        }
+
+        this.inputTitleElement.input.className = "input input_width-500";
 
         let poll = {};
         poll.title = this.inputTitleElement.getValue();
         poll.options = [];
 
-        if (!this.optionList) {
-            return;
-        }
-
-        console.log(this.optionList);
-
         this.optionList.map(option => {
-            poll.options.push(option.getValue());
+            if(option !== null) {
+                poll.options.push(option.getValue());
+            }
         });
+        console.log(poll);
         this.addPoll(poll);
-
 
     }
 
     addPoll(poll) {
-        console.log(this.optionList);
         createRequest('createPoll', {}, poll).then((response) => {
             if (response.status === responseStatuses.OK) {
-
-                //let titleInput = this.inputTitleElement.getValue();
-                //titleInput = '';
-
-
-                //this.optionList.map(option => {
-                 //       console.log(option.getValue());
-                        //let optionInput = option.getValue();
-                        //optionInput = '';
-                //});
+                this.inputTitleElement.input.value = '';
+                console.log(this.optionList.length);
+                this.optionList.map(option => {
+                    if(option !== null) {
+                        option.input.value = '';
+                    }
+                });
 
             } else {
                 console.log("NOT OK");
             }
         });
-        this.optionList.length = 0;
-        //console.log(this.optionList);
-
     }
 
-    handleChange() {
+    handleTitleChange() {
         if(!this.inputTitleElement.getValue()) {
-            this.setState({isFilled: false});
+            this.setState({isTitleFilled: false});
             return;
         }
-        this.setState({isFilled: true});
-    }
-
-    render() {
-        this.optionList.length = 0;
-        return (
-            <form className="main-wrapper" onSubmit= {this.sendPoll}>
-                <label className="main-title">New Poll</label>
-                <Input className="input input_width-500" name="question" type="text" placeholder="Type your question here..."
-                       ref={(c) => { this.inputTitleElement = c; }} onChange={this.handleChange} />
-                {this.getInputs()}
-                <div className="button-wrapper">
-                    <Button className="button" type="button" value="+ Add option" onClick={this.addMoreInputs}/>
-                    <Button className="button" type="button" value="- Delete option" onClick={this.removeInputs}/>
-                    <Button className="button" type="submit" value="Create Poll" />
-                </div>
-
-            </form>
-        );
+        this.setState({isTitleFilled: true});
     }
 
     addMoreInputs(){
@@ -130,6 +105,24 @@ class Form extends React.Component {
             rows.push(this.addInput(i))
         }
         return rows;
+    }
+
+    render() {
+        this.optionList.length = 0;
+        return (
+            <form className="main-wrapper" onSubmit= {this.sendPoll}>
+                <label className="main-title">New Poll</label>
+                <Input className="input input_width-500" name="question" type="text" placeholder="Type your question here..."
+                       ref={(c) => { this.inputTitleElement = c; }} onChange={this.handleTitleChange} />
+                {this.getInputs()}
+                <div className="button-wrapper">
+                    <Button className="button" type="button" value="+ Add option" onClick={this.addMoreInputs}/>
+                    <Button className="button" type="button" value="- Delete option" onClick={this.removeInputs}/>
+                    <Button className="button" type="submit" value="Create Poll" />
+                </div>
+
+            </form>
+        );
     }
 }
 

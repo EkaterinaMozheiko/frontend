@@ -111,8 +111,8 @@ body {
   .button__delete {
     width: 20px;
     height: 20px;
-    background: url("../components/img/delete.svg") no-repeat center;
-    border: none; }
+    border: none;
+    background: url("../components/img/delete.svg") no-repeat center; }
 
 .poll-list {
   margin-top: 20px; }

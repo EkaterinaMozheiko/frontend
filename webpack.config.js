@@ -60,7 +60,6 @@ module.exports = {
             template: './core/index.html',
             hash: true,
             minify: {
-                // removeAttributeQuotes: true,
                 collapseWhitespace: true,
                 html5: true,
                 removeComments: true,

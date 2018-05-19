@@ -20,9 +20,10 @@ class Polls extends React.Component {
         });
     };
 
-        deletePoll(id) {
-            createRequest('deletePoll', {id}).then((response) => {
-            this.setState({ polls: response.data || [] });
+    deletePoll(id) {
+        createRequest('deletePoll', {id}).then((response) => {
+            let filteredPoll = this.state.polls.filter((poll) => {return poll.id !== id});
+            this.setState({ polls: filteredPoll });
         });
     }
 

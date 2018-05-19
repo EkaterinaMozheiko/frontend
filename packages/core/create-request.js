@@ -64,7 +64,6 @@ module.exports = (requestName, queryOptions, body) => {
                 resolve(response);
             })
             .catch(() => {
-                // eslint-disable-next-line no-console
                 console.log({
                     status: 'BAD_REQUEST',
                     messages: [{ type: 'ERROR', code: 'BAD_REQUEST' }],
