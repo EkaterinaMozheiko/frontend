@@ -1,7 +1,7 @@
-const React = require('react');
+import React from 'react';
 import Button from '../components/button';
-const createRequest = require('core/create-request');
-import { Link } from 'react-router-dom'
+import createRequest from 'core/create-request';
+import { Link } from 'react-router-dom';
 
 class Polls extends React.Component {
     constructor(props) {

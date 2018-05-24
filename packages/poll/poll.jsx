@@ -1,10 +1,8 @@
+import React from 'react';
 import Button from '../components/button';
-import ShareButtons from '../components/share-buttons';
-import {Link} from 'react-router-dom'
-
-const React = require('react');
-const createRequest = require('core/create-request');
-
+import ShareButtons from'../components/share-buttons';
+import { Link } from'react-router-dom';
+import createRequest from'core/create-request';
 
 const API_HOST = 'http://localhost:3000';
 
@@ -15,10 +13,9 @@ class chosenPoll extends React.Component {
             poll: {},
             message: '',
             selectedOptions: {},
-            selectedOption: "",
+            selectedOption: '',
             showChart: false,
             isToggleOn: false
-            //warningMessage: ''
         });
 
         this.sendVote = this.sendVote.bind(this);
@@ -134,7 +131,7 @@ class chosenPoll extends React.Component {
         for (const prop of Object.getOwnPropertyNames(this.state.selectedOptions)) {
             delete this.state.selectedOptions[prop];
         }
-        console.log(this.state.selectedOptions);
+        // console.log(this.state.selectedOptions);
         this.setState({showChart: false});
         this.setState({isToggleOn: false});
     }
@@ -146,9 +143,7 @@ class chosenPoll extends React.Component {
                     <h2 className="main-title">{this.state.poll.title}</h2>
                     <div className="poll-subtitle">Choose one answer</div>
                     <div className="poll-list">
-
                         {this.renderOptions()}
-
                     </div>
                     <Button className="button button__vote" type="submit" value="Vote" onClick={this.sendVote}/>
                     <Button className="button" type="submit" value={this.state.isToggleOn ? 'Hide results' : 'Show results'}
@@ -157,15 +152,11 @@ class chosenPoll extends React.Component {
                 </div>
                 <div className="share-wrapper">
                     <h2 className="main-title main-title_small">Share this link</h2>
-
                     {this.showURL()}
                     <ShareButtons url={this.URL}/>
-
                 </div>
                 <div className="chart-block" style={{display: this.state.showChart ? 'block' : 'none' }}>
-
                     {this.viewResults()}
-
                 </div>
             </div>
         )

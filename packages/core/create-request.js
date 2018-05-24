@@ -1,4 +1,4 @@
-const apiConfig = require('./api-config');
+import apiConfig from './api-config';
 
 const API_HOST = 'http://localhost:3000';
 

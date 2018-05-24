@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     fetchPolls: {
         path: '/api/v001/polls',
         method: 'GET',

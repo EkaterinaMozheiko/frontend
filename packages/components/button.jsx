@@ -1,12 +1,12 @@
 import React from 'react';
 
-const Button = (props) => {
+const Button = ({className, type, onClick, value}) => {
     return(
         <button
-            className={props.className}
-            type={props.type}
-            onClick={props.onClick}
-        >{props.value}
+            className={className}
+            type={type}
+            onClick={onClick}
+        >{value}
         </button>
     );
 };

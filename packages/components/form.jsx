@@ -1,28 +1,30 @@
-const React = require('react');
+import React from 'react';
 import Input from './input';
 import Button from './button';
-const createRequest = require('core/create-request');
-const { responseStatuses } = require('core/constants');
+import createRequest from 'core/create-request';
+import responseStatuses from 'core/constants';
 
 class Form extends React.Component {
 
     constructor(props) {
 
         super(props);
-        this.state = ( {
+        this.state = {
             min: 2,
             max: 10,
             inputCount: 2,
             isTitleFilled: false,
-            isInputFilled: false
-        });
+            isInputFilled: false,
+            className: 'input input_width-500'
+        };
 
         this.addInput = this.addInput.bind(this);
-        this.addMoreInputs = this.addMoreInputs.bind(this);
-        this.removeInputs = this.removeInputs.bind(this);
         this.sendPoll = this.sendPoll.bind(this);
         this.addPoll = this.addPoll.bind(this);
         this.handleTitleChange = this.handleTitleChange.bind(this);
+        this.clearValue = this.clearValue.bind(this);
+        this.removeInput = this.changeInputCount.bind(this, -1);
+        this.addMoreInput = this.changeInputCount.bind(this, 1);
 
         this.optionList =[];
         this.inputTitleElement = null;
@@ -31,76 +33,84 @@ class Form extends React.Component {
     sendPoll(event) {
         event.preventDefault();
 
-        if (!this.state.isTitleFilled) {
-            this.inputTitleElement.input.className = "input input_width-500 input_red";
+   /*     if (!this.state.isTitleFilled) {
+            this.setState({className: "input input_width-500 input_red"});
+            // this.inputTitleElement.input.className = "input input_width-500 input_red";
+            this.inputTitleElement.input.className = this.state.className;
             return;
         }
 
-        this.inputTitleElement.input.className = "input input_width-500";
+        this.setState({className: "input input_width-500"});
+        this.inputTitleElement.input.className = this.state.className;
+        // this.inputTitleElement.input.className = "input input_width-500";
+*/
 
-        let poll = {};
-        poll.title = this.inputTitleElement.getValue();
-        poll.options = [];
+        const poll = {
+            title: this.inputTitleElement.getValue(),
+            options: []
+        };
 
         this.optionList.map(option => {
             if(option !== null) {
                 poll.options.push(option.getValue());
             }
         });
-        console.log(poll);
+        // console.log(poll);
         this.addPoll(poll);
-
     }
 
     addPoll(poll) {
         createRequest('createPoll', {}, poll).then((response) => {
-            if (response.status === responseStatuses.OK) {
+            if ((response.status === responseStatuses.OK)) {
                 this.inputTitleElement.input.value = '';
                 console.log(this.optionList.length);
-                this.optionList.map(option => {
-                    if(option !== null) {
-                        option.input.value = '';
-                    }
-                });
+                this.clearValue(poll);
 
             } else {
                 console.log("NOT OK");
             }
         });
+
+       /* for (const prop of Object.getOwnPropertyNames(poll)) {
+            delete poll[prop];
+        }
+
+        if (Object.keys(poll).length === 0) {
+            console.log('empty');
+        }*/
+    }
+
+    clearValue() {
+        this.optionList.map(option => {
+            if(option !== null) {
+                option.input.value = '';
+            }
+        });
     }
 
     handleTitleChange() {
-        if(!this.inputTitleElement.getValue()) {
-            this.setState({isTitleFilled: false});
-            return;
-        }
-        this.setState({isTitleFilled: true});
+        this.setState({
+            isTitleFilled: Boolean(this.inputTitleElement.getValue())
+        });
     }
 
-    addMoreInputs(){
-        let inputCount = this.state.inputCount;
-        if (inputCount < this.state.max) {
-            this.setState({inputCount: inputCount + 1})
-        }
-    }
-
-    removeInputs(){
-        let inputCount = this.state.inputCount;
-        if (inputCount > this.state.min) {
-            this.setState({inputCount: inputCount - 1})
+    changeInputCount(delta) {
+        const { inputCount, min, max } = this.state;
+        const newCount = inputCount + delta;
+        if (newCount >= min && newCount <= max) {
+            this.setState({ inputCount: newCount });
         }
     }
 
     addInput(i) {
-        let placeholder = "Option " + ++i ;
         return(
-            <Input key={i} className="input" placeholder={placeholder} ref={(c) => { this.optionList.push( c )} }/>
+            <Input key={i} className="input" placeholder={`Option ${++i}`} ref={(c) => { this.optionList.push( c )} }/>
         )
     }
 
     getInputs() {
         let rows = [];
-        let inputCount = this.state.inputCount;
+        const { inputCount} = this.state;
         for (let i=0; i < inputCount; i++) {
             rows.push(this.addInput(i))
         }
@@ -116,8 +126,8 @@ class Form extends React.Component {
                        ref={(c) => { this.inputTitleElement = c; }} onChange={this.handleTitleChange} />
                 {this.getInputs()}
                 <div className="button-wrapper">
-                    <Button className="button" type="button" value="+ Add option" onClick={this.addMoreInputs}/>
-                    <Button className="button" type="button" value="- Delete option" onClick={this.removeInputs}/>
+                    <Button className="button" type="button" value="+ Add option" onClick={this.addMoreInput}/>
+                    <Button className="button" type="button" value="- Delete option" onClick={this.removeInput}/>
                     <Button className="button" type="submit" value="Create Poll" />
                 </div>
 
@@ -126,5 +136,4 @@ class Form extends React.Component {
     }
 }
 
-module.exports = Form;
-
+export default Form;
