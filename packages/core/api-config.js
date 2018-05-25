@@ -18,4 +18,9 @@ export default {
         path: '/api/v001/polls/:id',
         method: 'DELETE',
     },
+
+    updatePoll: {
+        path: '/api/v001/polls/:id/votes/:index',
+        method: 'PATCH',
+    },
 };

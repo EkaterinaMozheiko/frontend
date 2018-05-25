@@ -3,6 +3,7 @@ import Button from '../components/button';
 import ShareButtons from'../components/share-buttons';
 import { Link } from'react-router-dom';
 import createRequest from'core/create-request';
+import responseStatuses from 'core/constants';
 
 const API_HOST = 'http://localhost:3000';
 
@@ -12,10 +13,10 @@ class chosenPoll extends React.Component {
         this.state = ( {
             poll: {},
             message: '',
-            selectedOptions: {},
             selectedOption: '',
             showChart: false,
-            isToggleOn: false
+            isToggleOn: false,
+            selectedId: 0
         });
 
         this.sendVote = this.sendVote.bind(this);
@@ -24,7 +25,7 @@ class chosenPoll extends React.Component {
         this.handleOnChange = this.handleOnChange.bind(this);
         this.URL = API_HOST + this.props.match.url;
         this.handleClick = this.handleClick.bind(this);
-        this.refreshResults = this.refreshResults.bind(this);
+        // this.refreshResults = this.refreshResults.bind(this);
         this.hideMessage = this.hideMessage.bind(this);
     }
 
@@ -37,7 +38,7 @@ class chosenPoll extends React.Component {
     };
 
     handleOnChange(event) {
-        this.setState({ selectedOption: event.target.value });
+        this.setState({ selectedOption: event.target.value, selectedId: event.target.id});
     }
 
     handleClick() {
@@ -48,10 +49,10 @@ class chosenPoll extends React.Component {
     renderOptions() {
         let i = 0;
         if (this.state.poll.options) {
-            return this.state.poll.options.map(option =>
+            return this.state.poll.options.map(item =>
                 <div key ={i++} className="option-wrapper">
-                    <input className="radio" id={i} value={option} name="radio" type="radio" onChange={this.handleOnChange}/>
-                    <label className="option-label" htmlFor={i}>{option}</label>
+                    <input className="radio" id={i} value={item.option} name="radio" type="radio" onChange={this.handleOnChange}/>
+                    <label className="option-label" htmlFor={i}>{item.option}</label>
                     <br/>
                 </div>
             );
@@ -65,48 +66,61 @@ class chosenPoll extends React.Component {
             return;
         }
 
+        const id = this.props.match.params.id;
+
         this.setState({ message: "Thanks for your vote." });
 
-        if (!this.state.selectedOptions[this.state.selectedOption]) {
-            this.state.selectedOptions[this.state.selectedOption] = 1;
-        }
-        else {
-            this.state.selectedOptions[this.state.selectedOption] +=1;
-        }
+            let index = this.state.selectedId;
+
+            createRequest('updatePoll', { id, index}).then((response) => {
+                if (response.status === responseStatuses.OK) {
+                    //console.log(response);
+                } else {
+                    console.log('NOT OK');
+                }
+
+            });
+
+        createRequest('fetchPoll', {id}).then((response) => {
+            this.setState({ poll: response.data || [] });
+        });
 
         this.hideMessage();
 
     }
 
     viewResults() {
-        const data = this.state.selectedOptions;
+        const data = this.state.poll.options;
         let bars = [];
         let totalVotes = 0;
+
         if (!data) {
             return;
         }
 
         for (let item in data) {
             if (data.hasOwnProperty(item)) {
-                bars.push(
-                    <div key={item} className="bar-wrapper">
+                if (data[item].votes !== 0) {
+                    bars.push(
+                        <div key={item} className="bar-wrapper">
 
-                            <p>{item}</p>
+                            <p>{data[item].option}</p>
 
-                        <div className="bar" style={{width: data[item] * 20}}>
-                            {data[item]}
+                            <div className="bar" style={{width: data[item].votes * 30}}>
+                                {data[item].votes}
+                            </div>
                         </div>
-                    </div>
-                );
-                totalVotes += data[item];
+                    );
+                    totalVotes += data[item].votes;
+                }
             }
         }
+
         return (
             <div className="main-wrapper main-wrapper_chart">
                 <div className="chart-title">{this.state.poll.title}</div>
                 {bars}
                 <div className="chart-title">{totalVotes} total votes.</div>
-                <Button className="button" type="submit" value="Refresh results" onClick={this.refreshResults}/>
             </div>
         )
     }
@@ -126,7 +140,7 @@ class chosenPoll extends React.Component {
         }.bind(this), 1000);
     }
 
-    refreshResults() {
+    /*refreshResults() {
         this.state.selectedOptions = {};
         for (const prop of Object.getOwnPropertyNames(this.state.selectedOptions)) {
             delete this.state.selectedOptions[prop];
@@ -134,7 +148,7 @@ class chosenPoll extends React.Component {
         // console.log(this.state.selectedOptions);
         this.setState({showChart: false});
         this.setState({isToggleOn: false});
-    }
+    }*/
 
     render() {
         return (

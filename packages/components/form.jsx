@@ -14,8 +14,7 @@ class Form extends React.Component {
             max: 10,
             inputCount: 2,
             isTitleFilled: false,
-            isInputFilled: false,
-            className: 'input input_width-500'
+            className: 'input input_width-500 input_red'
         };
 
         this.addInput = this.addInput.bind(this);
@@ -32,30 +31,33 @@ class Form extends React.Component {
 
     sendPoll(event) {
         event.preventDefault();
-
-   /*     if (!this.state.isTitleFilled) {
+        if (!this.state.isTitleFilled) {
             this.setState({className: "input input_width-500 input_red"});
-            // this.inputTitleElement.input.className = "input input_width-500 input_red";
             this.inputTitleElement.input.className = this.state.className;
             return;
         }
 
-        this.setState({className: "input input_width-500"});
-        this.inputTitleElement.input.className = this.state.className;
-        // this.inputTitleElement.input.className = "input input_width-500";
-*/
+        if(!this.state.isTitleFilled) {
+            return;
+        }
 
         const poll = {
             title: this.inputTitleElement.getValue(),
             options: []
         };
 
+        let index = 1;
+
         this.optionList.map(option => {
             if(option !== null) {
-                poll.options.push(option.getValue());
+                poll.options.push({
+                    index: String(index++),
+                    option: option.getValue(),
+                    votes: 0
+                });
             }
         });
-        // console.log(poll);
+        //console.log(poll);
         this.addPoll(poll);
     }
 
@@ -70,14 +72,6 @@ class Form extends React.Component {
                 console.log("NOT OK");
             }
         });
-
-       /* for (const prop of Object.getOwnPropertyNames(poll)) {
-            delete poll[prop];
-        }
-
-        if (Object.keys(poll).length === 0) {
-            console.log('empty');
-        }*/
     }
 
     clearValue() {
@@ -92,6 +86,15 @@ class Form extends React.Component {
         this.setState({
             isTitleFilled: Boolean(this.inputTitleElement.getValue())
         });
+
+        if (!this.state.isTitleFilled) {
+            this.setState({className: "input input_width-500 input_red"});
+            this.inputTitleElement.input.className = this.state.className;
+            return;
+        }
+
+        this.setState({className: "input input_width-500"});
+        this.inputTitleElement.input.className = this.state.className;
     }
 
     changeInputCount(delta) {
