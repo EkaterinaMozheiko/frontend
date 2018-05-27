@@ -10,6 +10,7 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.join(__dirname, '/dist'),
+    publicPath: '/',
   },
   devtool: 'source-map',
   module: {
@@ -24,18 +25,28 @@ module.exports = {
       },
       {
         test: /\.(sass|scss)$/,
-        use: ExtractTextPlugin.extract({
+        use: ['css-hot-loader'].concat(ExtractTextPlugin.extract({
           use: [
             {
               loader: 'css-loader',
               options: { sourceMap: true, minimize: true },
             },
+            { loader: 'resolve-url-loader' },
             {
               loader: 'sass-loader',
               options: { sourceMap: true },
             },
           ],
-        }),
+        })),
+      },
+      {
+        test: /\.(png|jpg|gif|svg)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {},
+          },
+        ],
       },
     ],
   },
@@ -50,7 +61,6 @@ module.exports = {
       template: './core/index.html',
       hash: true,
       minify: {
-        // removeAttributeQuotes: true,
         collapseWhitespace: true,
         html5: true,
         removeComments: true,
@@ -66,5 +76,6 @@ module.exports = {
     contentBase: './dist',
     historyApiFallback: true,
     hot: true,
+    proxy: { '/api': 'http://localhost:3000' },
   },
 };

@@ -1,19 +1,24 @@
 const React = require('react');
-import Input from '../components/input';
-import Header from '../components/header';
-import Button from '../components/button';
-const { div } = require('react-dom');
+const Router = require('react-router-dom').BrowserRouter;
+const { Route } = require('react-router-dom');
+const Header = require('../components/header');
+const Poll = require('../poll/poll');
+const Form = require('../components/form');
+const Polls = require('../polls/polls');
 
-const Main = () => (
-    <div className="poll-application">
-        <Header/>
-        <Input placeholder="Question"/>
-        <Input placeholder="Option 1"/>
-        <Input placeholder="Option 2"/>
-        <Input placeholder="Option 3"/>
-        <Button className="button button_small" type="button" name="Add Options"/>
-        <Button className="button button__send" type="submit" name="Create"/>
-    </div>
-    );
+const Main = () => {
+  return (
+    <Router>
+      <div className="poll-application">
+        <Header />
+        <div className="poll-wrapper">
+          <Route exact path="/" component={Form} />
+          <Route exact path="/polls" component={Polls} />
+          <Route path="/polls/:id" component={Poll} />
+        </div>
+      </div>
+    </Router>
+  );
+};
 
 module.exports = Main;

@@ -1,15 +1,25 @@
-import React from 'react';
-import '../core/main.scss'
+/* eslint-disable react/require-default-props */
+const React = require('react');
+const PropTypes = require('prop-types');
 
-function Button({className, type, name}) {
-    return(
-        <button
-            className={className}
-            type={type}
-            name={name}
-        >
-        </button>
-    );
-}
+const propTypes = {
+  className: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  onClick: PropTypes.func,
+  value: PropTypes.string,
+};
 
-export default Button;
+const Button = ({ className, type, onClick, value }) => {
+  return (
+    <button
+      className={className}
+      type={type}
+      onClick={onClick}
+    >{value}
+    </button>
+  );
+};
+
+Button.propTypes = propTypes;
+
+module.exports = Button;
