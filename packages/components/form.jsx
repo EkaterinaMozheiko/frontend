@@ -1,142 +1,152 @@
-import React from 'react';
-import Input from './input';
-import Button from './button';
-import createRequest from 'core/create-request';
-import responseStatuses from 'core/constants';
+/* eslint-disable no-plusplus,no-param-reassign */
+const React = require('react');
+const Input = require('./input');
+const Button = require('./button');
+const createRequest = require('core/create-request');
+const { responseStatus } = require('core/constants');
 
 class Form extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      min: 2,
+      max: 10,
+      inputCount: 2,
+      isTitleFilled: false,
+      className: 'input input_width-500',
+    };
 
-    constructor(props) {
+    this.addInput = this.addInput.bind(this);
+    this.sendPoll = this.sendPoll.bind(this);
+    this.addPoll = this.addPoll.bind(this);
+    this.handleTitleChange = this.handleTitleChange.bind(this);
+    this.clearValue = this.clearValue.bind(this);
+    this.removeInput = this.changeInputCount.bind(this, -1);
+    this.addMoreInput = this.changeInputCount.bind(this, 1);
 
-        super(props);
-        this.state = {
-            min: 2,
-            max: 10,
-            inputCount: 2,
-            isTitleFilled: false,
-            className: 'input input_width-500 input_red'
-        };
+    this.optionList = [];
+    this.inputTitleElement = null;
+  }
 
-        this.addInput = this.addInput.bind(this);
-        this.sendPoll = this.sendPoll.bind(this);
-        this.addPoll = this.addPoll.bind(this);
-        this.handleTitleChange = this.handleTitleChange.bind(this);
-        this.clearValue = this.clearValue.bind(this);
-        this.removeInput = this.changeInputCount.bind(this, -1);
-        this.addMoreInput = this.changeInputCount.bind(this, 1);
+  getInputs() {
+    const rows = [];
+    const { inputCount } = this.state;
 
-        this.optionList =[];
-        this.inputTitleElement = null;
+    for (let i = 0; i < inputCount; i++) {
+      rows.push(this.addInput(i));
     }
 
-    sendPoll(event) {
-        event.preventDefault();
-        if (!this.state.isTitleFilled) {
-            this.setState({className: "input input_width-500 input_red"});
-            this.inputTitleElement.input.className = this.state.className;
-            return;
-        }
+    return rows;
+  }
 
-        if(!this.state.isTitleFilled) {
-            return;
-        }
+  addInput(i) {
+    return (
+      <Input
+        key={i}
+        className="input"
+        placeholder={`Option ${++i}`}
+        ref={(c) => {
+          this.optionList.push(c);
+        }}
+      />
+    );
+  }
 
-        const poll = {
-            title: this.inputTitleElement.getValue(),
-            options: []
-        };
+  changeInputCount(delta) {
+    const { inputCount, min, max } = this.state;
+    const newCount = inputCount + delta;
+    if (newCount >= min && newCount <= max) {
+      this.setState({ inputCount: newCount });
+    }
+  }
 
-        let index = 1;
-
-        this.optionList.map(option => {
-            if(option !== null) {
-                poll.options.push({
-                    index: String(index++),
-                    option: option.getValue(),
-                    votes: 0
-                });
-            }
-        });
-        //console.log(poll);
-        this.addPoll(poll);
+  handleTitleChange() {
+    this.setState({ isTitleFilled: Boolean(this.inputTitleElement.getValue()) });
+    const { isTitleFilled, className } = this.state;
+    if (!isTitleFilled) {
+      this.setState({ className: 'input input_width-500 input_red' });
+      this.inputTitleElement.input.className = className;
+      return;
     }
 
-    addPoll(poll) {
-        createRequest('createPoll', {}, poll).then((response) => {
-            if ((response.status === responseStatuses.OK)) {
-                this.inputTitleElement.input.value = '';
-                console.log(this.optionList.length);
-                this.clearValue(poll);
+    this.setState({ className: 'input input_width-500' });
+    this.inputTitleElement.input.className = className;
+  }
 
-            } else {
-                console.log("NOT OK");
-            }
-        });
+  clearValue() {
+    this.optionList.map((option) => {
+      if (option === null) {
+        return;
+      }
+      option.input.value = '';
+    });
+  }
+
+  addPoll(poll) {
+    createRequest('createPoll', {}, poll).then((response) => {
+      if ((response.status === responseStatus.OK)) {
+        this.inputTitleElement.input.value = '';
+        this.clearValue(poll);
+      }
+    });
+  }
+
+  sendPoll(event) {
+    event.preventDefault();
+
+    const poll = {
+      title: this.inputTitleElement.getValue(),
+      options: [],
+    };
+    let index = 1;
+    const { isTitleFilled, className } = this.state;
+
+    if (!isTitleFilled) {
+      this.setState({ className: 'input input_width-500 input_red' });
+      this.inputTitleElement.input.className = className;
+      return;
     }
 
-    clearValue() {
-        this.optionList.map(option => {
-            if(option !== null) {
-                option.input.value = '';
-            }
-        });
-    }
+    this.optionList.map((option) => {
+      if (option === null) {
+        return;
+      }
+      poll.options.push({
+        index: String(index++),
+        option: option.getValue(),
+        votes: 0,
+      });
+    });
 
-    handleTitleChange() {
-        this.setState({
-            isTitleFilled: Boolean(this.inputTitleElement.getValue())
-        });
+    this.addPoll(poll);
+  }
 
-        if (!this.state.isTitleFilled) {
-            this.setState({className: "input input_width-500 input_red"});
-            this.inputTitleElement.input.className = this.state.className;
-            return;
-        }
+  render() {
+    this.optionList.length = 0;
 
-        this.setState({className: "input input_width-500"});
-        this.inputTitleElement.input.className = this.state.className;
-    }
+    return (
+      <form className="main-wrapper" onSubmit={this.sendPoll}>
+        <label className="main-title">New Poll</label>
+        <Input
+          className="input input_width-500"
+          name="question"
+          type="text"
+          placeholder="Type your question here..."
+          ref={(c) => {
+            this.inputTitleElement = c;
+          }}
+          onChange={this.handleTitleChange}
+        />
+        {this.getInputs()}
+        <div className="button-wrapper">
+          <Button className="button" type="button" value="+ Add option" onClick={this.addMoreInput} />
+          <Button className="button" type="button" value="- Delete option" onClick={this.removeInput} />
+          <Button className="button" type="submit" value="Create Poll" />
+        </div>
 
-    changeInputCount(delta) {
-        const { inputCount, min, max } = this.state;
-        const newCount = inputCount + delta;
-        if (newCount >= min && newCount <= max) {
-            this.setState({ inputCount: newCount });
-        }
-    }
-
-    addInput(i) {
-        return(
-            <Input key={i} className="input" placeholder={`Option ${++i}`} ref={(c) => { this.optionList.push( c )} }/>
-        )
-    }
-
-    getInputs() {
-        let rows = [];
-        const { inputCount} = this.state;
-        for (let i=0; i < inputCount; i++) {
-            rows.push(this.addInput(i))
-        }
-        return rows;
-    }
-
-    render() {
-        this.optionList.length = 0;
-        return (
-            <form className="main-wrapper" onSubmit= {this.sendPoll}>
-                <label className="main-title">New Poll</label>
-                <Input className="input input_width-500" name="question" type="text" placeholder="Type your question here..."
-                       ref={(c) => { this.inputTitleElement = c; }} onChange={this.handleTitleChange} />
-                {this.getInputs()}
-                <div className="button-wrapper">
-                    <Button className="button" type="button" value="+ Add option" onClick={this.addMoreInput}/>
-                    <Button className="button" type="button" value="- Delete option" onClick={this.removeInput}/>
-                    <Button className="button" type="submit" value="Create Poll" />
-                </div>
-
-            </form>
-        );
-    }
+      </form>
+    );
+  }
 }
 
-export default Form;
+module.exports = Form;

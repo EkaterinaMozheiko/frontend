@@ -2,7 +2,6 @@
 
 $font-family: 'PT Sans', sans-serif;;
 $font-size: 16px;
-$primary-color: #eff6fd;
 $color: #1abc9c;
 @mixin center-position ($direction, $content)
 {
@@ -345,17 +344,18 @@ input[type='radio']
 .share-button-wrapper
 {
     padding: 25px 0;
-
-    // @include center-position(row, space-around);
 }
 
 .share-button
 {
     display: inline-block;
-    padding-right: 20px;
+
     margin-right: 30px;
+    padding-right: 20px;
 
     cursor: pointer;
+
+    outline: none;
     &:hover
     {
         opacity: .7;

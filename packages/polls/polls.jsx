@@ -1,49 +1,55 @@
-import React from 'react';
-import Button from '../components/button';
-import createRequest from 'core/create-request';
-import { Link } from 'react-router-dom';
+const React = require('react');
+const Button = require('../components/button');
+const createRequest = require('core/create-request');
+const { Link } = require('react-router-dom');
+const { responseStatus } = require('core/constants');
 
 class Polls extends React.Component {
-    constructor(props) {
+  constructor(props) {
+    super(props);
+    this.state = ({ polls: [] });
 
-        super(props);
-        this.state = ( {
-            polls: []
+    this.deletePoll = this.deletePoll.bind(this);
+  }
+
+  componentDidMount() {
+    createRequest('fetchPolls').then((response) => {
+      if (response.status === responseStatus.OK) {
+        this.setState({ polls: response.data || [] });
+      }
+    });
+  }
+
+  deletePoll(id) {
+    createRequest('deletePoll', { id }).then((response) => {
+      if ((response.status === responseStatus.OK)) {
+        const { polls } = this.state;
+        const filteredPoll = polls.filter((poll) => {
+          return poll.id !== id;
         });
+        this.setState({ polls: filteredPoll });
+      }
+    });
+  }
 
-        this.deletePoll = this.deletePoll.bind(this);
-    }
-
-    componentDidMount() {
-        createRequest('fetchPolls').then((response) => {
-            this.setState({ polls: response.data || [] });
-        });
-    };
-
-    deletePoll(id) {
-        createRequest('deletePoll', {id}).then((response) => {
-            let filteredPoll = this.state.polls.filter((poll) => {return poll.id !== id});
-            this.setState({ polls: filteredPoll });
-        });
-    }
-
-    render() {
-        return (
-            <div className="main-wrapper main-wrapper_small">
-                <h2 className="main-title">
-                    All created polls:
-                </h2>
-                <ul className="poll-list">
-                    {this.state.polls.map(poll =>
-                        <li className="polls__item" key={poll.id}>
-                            <Button className="button button__delete" onClick={this.deletePoll.bind(this, poll.id)}/>
-                            <Link className="link" to={`/polls/${poll.id}`}>{poll.title}</Link>
-                        </li>
-                    )}
-                </ul>
-            </div>
-        );
-    }
+  render() {
+    const { polls } = this.state;
+    return (
+      <div className="main-wrapper main-wrapper_small">
+        <h2 className="main-title">
+          All created polls:
+        </h2>
+        <ul className="poll-list">
+          {polls.map((poll) => (
+            <li className="polls__item" key={poll.id}>
+              <Button className="button button__delete" type="button" onClick={this.deletePoll.bind(null, poll.id)} />
+              <Link className="link" to={`/polls/${poll.id}`}>{poll.title}</Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
 }
 
-export default Polls;
+module.exports = Polls;
